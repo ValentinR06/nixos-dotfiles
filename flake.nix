@@ -19,17 +19,17 @@
     nixosConfigurations.hyprland-btw = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
-	./configuration.nix
-  helium-browser.nixosModules.default
-	home-manager.nixosModules.home-manager
+        ./configuration.nix
+        helium-browser.nixosModules.default
+        home-manager.nixosModules.home-manager
         {
-	  home-manager = {
-	    useGlobalPkgs = true;
-	    useUserPackages = true;
+          home-manager = {
+            useGlobalPkgs = true;
+            useUserPackages = true;
             users.valentin = import ./home.nix;
             backupFileExtension = "backup";
           };
-	}
+        }
       ];
     };
   };
