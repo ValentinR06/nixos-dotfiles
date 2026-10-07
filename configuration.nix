@@ -59,6 +59,7 @@
     git
     hyprpaper
     vscodium-fhs
+    vscode-fhs
     neovim
     fastfetch
     noriskclient-launcher
