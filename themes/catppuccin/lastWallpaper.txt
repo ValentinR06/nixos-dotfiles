@@ -1,0 +1,1 @@
+/home/valentin/nixos-dotfiles/themes/catppuccin/wallpapers/waterfall.png

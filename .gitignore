@@ -1,0 +1,21 @@
+# Nix build symlinks
+result
+result-*
+
+# Dev shell / Direnv state
+.direnv/
+
+# Editor artifacts (Neovim)
+*.swp
+*.swo
+*~
+Session.vim
+.vscode
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+
+# Secrets / Private keys (if not using sops-nix/agenix)
+*.key
+*.pem
