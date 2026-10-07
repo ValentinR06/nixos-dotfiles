@@ -58,7 +58,11 @@
     kitty
     git
     hyprpaper
-    vscodium-fhs
+    (vscodium-fhs.override {
+      targetPkgs = pkgs: with pkgs; [
+        brotli
+      ];
+    })    
     neovim
     fastfetch
     noriskclient-launcher
