@@ -67,6 +67,7 @@
     spotify
     superfile
     bluetui
+    rpi-imager
   ];
 
   fonts.packages = with pkgs; [
