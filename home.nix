@@ -12,7 +12,7 @@
       update = "nix flake update --flake ~/nixos-dotfiles && sudo nixos-rebuild switch --flake ~/nixos-dotfiles#hyprland-btw";
     };
     profileExtra = ''
-      if [ -z "$WAYLAND_DISPLAY" ] && [ "XDG_VTNR" = 1 ]; then
+      if [ -z "$WAYLAND_DISPLAY" ] && [ "$XDG_VTNR" = 1 ]; then
         exec start-hyprland
       fi
     '';
