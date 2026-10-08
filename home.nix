@@ -4,18 +4,67 @@
   home.username = "valentin";
   home.homeDirectory = "/home/valentin";
   home.stateVersion = "26.05";
+  
+  home.packages = with pkgs; [
+    grc
+    fzf
+    fastfetch
+  ];
+  
   programs.fish = {
     enable = true;
     shellAliases = {
       btw = "echo i use hyprland btw";
       rebuild = "sudo nixos-rebuild switch --flake ~/nixos-dotfiles#hyprland-btw";
       update = "nix flake update --flake ~/nixos-dotfiles && sudo nixos-rebuild switch --flake ~/nixos-dotfiles#hyprland-btw";
+      
+      ls = "eza --icons=always --color=always";
+      ll = "eza -lh --icons=always --color=always";
+      la = "eza -lah --icons=always --color=always";
+      tree = "eza --tree --icons=always --color=always";
     };
+
+    interactiveShellInit = ''
+      # Standard-Begrüßung deaktivieren
+      set -g fish_greeting ""
+      
+      # Optional: System-Infos beim Start im Terminal anzeigen
+      # fastfetch
+    '';
+
     loginShellInit = ''
       if test -z "$WAYLAND_DISPLAY"; and test "$XDG_VTNR" = 1
         exec start-hyprland
       end
     '';
+
+    plugins = [
+      {
+        name = "grc";
+        src = pkgs.fishPlugins.grc.src;
+      }
+      {
+        name = "fzf-fish";
+        src = pkgs.fishPlugins.fzf-fish.src;
+      }
+    ];
+  };
+
+  programs.starship = {
+    enable = true;
+    enableFishIntegration = true;
+    settings = {
+      add_newline = true;
+      character = {
+        success_symbol = "[➜](bold green)";
+        error_symbol = "[✗](bold red)";
+      };
+    };
+  };
+
+  programs.eza = {
+    enable = true;
+    enableFishIntegration = true;
   };
 
   home.pointerCursor = {
@@ -65,4 +114,3 @@
   xdg.configFile."kitty/colors.conf".source = 
     config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.cache/theme/kitty/colors.conf";
 }
-
