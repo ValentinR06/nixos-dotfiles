@@ -33,6 +33,7 @@
 
   users.users.valentin = {
     isNormalUser = true;
+    shell = pkgs.fish;
     extraGroups = [ "wheel" ];
     packages = with pkgs; [
       tree

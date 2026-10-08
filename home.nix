@@ -4,17 +4,17 @@
   home.username = "valentin";
   home.homeDirectory = "/home/valentin";
   home.stateVersion = "26.05";
-  programs.bash = {
+  programs.fish = {
     enable = true;
     shellAliases = {
       btw = "echo i use hyprland btw";
       rebuild = "sudo nixos-rebuild switch --flake ~/nixos-dotfiles#hyprland-btw";
       update = "nix flake update --flake ~/nixos-dotfiles && sudo nixos-rebuild switch --flake ~/nixos-dotfiles#hyprland-btw";
     };
-    profileExtra = ''
-      if [ -z "$WAYLAND_DISPLAY" ] && [ "$XDG_VTNR" = 1 ]; then
+    loginShellInit = ''
+      if test -z "$WAYLAND_DISPLAY"; and test "$XDG_VTNR" = 1
         exec start-hyprland
-      fi
+      end
     '';
   };
 
