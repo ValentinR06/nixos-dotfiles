@@ -1,5 +1,5 @@
 local cursor_theme = "Bibata-Modern-Classic"
-local cursor_size = "24"
+local cursor_size = "20"
 
 hl.env("HYPRCURSOR_THEME", cursor_theme)
 hl.env("HYPRCURSOR_SIZE", cursor_size)
