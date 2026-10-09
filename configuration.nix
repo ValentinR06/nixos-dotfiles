@@ -62,12 +62,9 @@
     vscode-fhs
     neovim
     fastfetch
-    noriskclient-launcher
-    discord
-    spotify
     superfile
     bluetui
-    rpi-imager
+    brightnessctl
   ];
 
   fonts.packages = with pkgs; [

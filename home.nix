@@ -9,6 +9,10 @@
     grc
     fzf
     fastfetch
+    noriskclient-launcher
+    discord
+    spotify
+    rpi-imager
   ];
   
   programs.fish = {
