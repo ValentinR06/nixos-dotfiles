@@ -21,8 +21,8 @@ RowLayout {
       weight: Font.Medium
     }
     color: {
-      if (Battery.charging || Battery.percentage >= 80) return Colors.success
-      if (Battery.percentage < 20) return Colors.critical
+      if (Battery.charging || Battery.percentage >= 70) return Colors.success
+      if (Battery.percentage < 30) return Colors.critical
       return Colors.warning
     }
     text: root.icon
