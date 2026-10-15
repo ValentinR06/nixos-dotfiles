@@ -63,6 +63,7 @@
     neovim
     fastfetch
     superfile
+    nautilus
     bluetui
     brightnessctl
   ];
