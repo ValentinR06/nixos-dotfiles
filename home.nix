@@ -10,6 +10,7 @@
     fzf
     fastfetch
     noriskclient-launcher
+    modrinth-app
     discord
     spotify
   ];
