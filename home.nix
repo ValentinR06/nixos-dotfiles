@@ -13,6 +13,7 @@
     modrinth-app
     discord
     spotify
+    prismlauncher
   ];
   
   programs.fish = {
