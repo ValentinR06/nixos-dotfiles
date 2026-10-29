@@ -1,3 +1,4 @@
+require("conf.layout")
 require("conf.monitors")
 require("conf.autostart")
 require("conf.env_var")
