@@ -1,4 +1,3 @@
-require("conf.layout")
 require("conf.monitors")
 require("conf.autostart")
 require("conf.env_var")
@@ -10,3 +9,5 @@ require("conf.keybind")
 require("conf.windowrules")
 require("conf.misc")
 require("conf.cursor")
+require("conf.layout")
+
