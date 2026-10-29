@@ -1,1 +1,1 @@
-/home/valentin/nixos-dotfiles/themes/catppuccin/wallpapers/waterfall.png
+/home/valentin/nixos-dotfiles/themes/catppuccin/wallpapers/japan-alley.png

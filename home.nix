@@ -14,6 +14,7 @@
     discord
     spotify
     prismlauncher
+    rpi-imager
   ];
   
   programs.fish = {
