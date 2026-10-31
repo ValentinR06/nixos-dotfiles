@@ -65,6 +65,8 @@
         success_symbol = "[➜](bold green)";
         error_symbol = "[✗](bold red)";
       };
+      directory.style = "bold blue";
+      git_branch.style = "bold purple";
     };
   };
 
