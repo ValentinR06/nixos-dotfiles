@@ -50,5 +50,5 @@ hl.window_rule({
 hl.window_rule({
     name = "maximized-no-blur",
     match = { fullscreen_state_internal = 1 },
-    no_blur = true,
+    opacity = "1.0 override 1.0 override",
 })
