@@ -46,3 +46,9 @@ hl.window_rule({
 	move = "20 monitor_h-120",
 	float = true,
 })
+
+hl.window_rule({
+    name = "maximized-no-blur",
+    match = { fullscreen_state_internal = 1 },
+    no_blur = true,
+})
