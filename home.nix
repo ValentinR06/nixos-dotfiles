@@ -60,13 +60,11 @@
     enable = true;
     enableFishIntegration = true;
     settings = {
-      add_newline = true;
+      add_newline = false;
       character = {
-        success_symbol = "[➜](bold green)";
-        error_symbol = "[✗](bold red)";
+        success_symbol = "[➜]";
+        error_symbol = "[✗]";
       };
-      directory.style = "bold blue";
-      git_branch.style = "bold purple";
     };
   };
 
