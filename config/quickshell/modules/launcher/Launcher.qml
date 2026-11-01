@@ -73,10 +73,16 @@ Scope {
       right: true
     }
 
-    // Centered launcher box
+    MouseArea {
+      anchors.fill: parent
+      onClicked: launcherPanel.visible = false
+    }
+
+    // Launcher box
     Rectangle {
       id: launcherBox
-      anchors.centerIn: parent
+      anchors.bottom: parent.bottom
+      anchors.horizontalCenter: parent.horizontalCenter
       width: 580
       height: 480
       radius: 16
@@ -311,25 +317,25 @@ Scope {
             spacing: 4
             Rectangle {
               width: hintUp.width + 8; height: 18; radius: 4; color: Colors.surface
-              Text { id: hintUp; anchors.centerIn: parent; text: "↑↓"; color: Colors.muted; font.pixelSize: Colors.fontSize - 4; font.family: Colors.fontFamily }
+              Text { id: hintUp; anchors.centerIn: parent; text: "↑↓"; color: Colors.muted; font.pixelSize: Colors.fontSize - 3; font.family: Colors.fontFamily }
             }
-            Text { text: "navigate"; color: Colors.muted; font.pixelSize: Colors.fontSize - 4; font.family: Colors.fontFamily; anchors.verticalCenter: parent.verticalCenter }
+            Text { text: "navigate"; color: Colors.muted; font.pixelSize: Colors.fontSize; font.family: Colors.fontFamily; anchors.verticalCenter: parent.verticalCenter }
           }
 
           Row {
             spacing: 4
             Rectangle {
               width: hintEnter.width + 8; height: 18; radius: 4; color: Colors.surface
-              Text { id: hintEnter; anchors.centerIn: parent; text: "⏎"; color: Colors.muted; font.pixelSize: Colors.fontSize - 4; font.family: Colors.fontFamily }
+              Text { id: hintEnter; anchors.centerIn: parent; text: "⏎"; color: Colors.muted; font.pixelSize: Colors.fontSize - 3; font.family: Colors.fontFamily }
             }
-            Text { text: "launch"; color: Colors.muted; font.pixelSize: Colors.fontSize - 4; font.family: Colors.fontFamily; anchors.verticalCenter: parent.verticalCenter }
+            Text { text: "launch"; color: Colors.muted; font.pixelSize: Colors.fontSize; font.family: Colors.fontFamily; anchors.verticalCenter: parent.verticalCenter }
           }
 
           Row {
             spacing: 4
             Rectangle {
               width: hintEsc.width + 8; height: 18; radius: 4; color: Colors.surface
-              Text { id: hintEsc; anchors.centerIn: parent; text: "esc"; color: Colors.muted; font.pixelSize: Colors.fontSize - 4; font.family: Colors.fontFamily }
+              Text { id: hintEsc; anchors.centerIn: parent; text: "esc"; color: Colors.muted; font.pixelSize: Colors.fontSize - 3; font.family: Colors.fontFamily }
             }
             Text { text: "close"; color: Colors.muted; font.pixelSize: Colors.fontSize; font.family: Colors.fontFamily; anchors.verticalCenter: parent.verticalCenter }
           }
