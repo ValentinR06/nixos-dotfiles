@@ -33,6 +33,10 @@ Scope {
           WorkspaceWidget {
             id: workspaceWidget
           }
+
+          ActiveWindowWidget {
+            id: activeWindowWidget
+          }
         }
 
         RowLayout {
