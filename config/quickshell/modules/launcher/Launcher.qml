@@ -80,7 +80,7 @@ Scope {
       width: 580
       height: 480
       radius: 16
-      color: Colors.surface
+      color: Colors.bg
       border.color: Colors.bg
       border.width: 1
 
@@ -103,7 +103,7 @@ Scope {
           Layout.fillWidth: true
           height: 44
           radius: 10
-          color: Colors.bg
+          color: Colors.surface
           border.color: searchInput.activeFocus ? Colors.accent : Colors.bg_dark
           border.width: 1
 
