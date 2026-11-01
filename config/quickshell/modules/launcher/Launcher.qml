@@ -81,7 +81,7 @@ Scope {
       height: 480
       radius: 16
       color: Colors.bg
-      border.color: Colors.bg
+      border.color: Colors.accent
       border.width: 1
 
       ColumnLayout {
