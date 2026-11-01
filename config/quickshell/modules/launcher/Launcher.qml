@@ -73,17 +73,6 @@ Scope {
       right: true
     }
 
-    // Dark overlay backdrop
-    MouseArea {
-      anchors.fill: parent
-      onClicked: launcherPanel.visible = false
-
-      Rectangle {
-        anchors.fill: parent
-        color: Colors.bg_dark
-      }
-    }
-
     // Centered launcher box
     Rectangle {
       id: launcherBox
