@@ -3,13 +3,22 @@ import Quickshell
 import Quickshell.Hyprland
 import qs
 
-Text {
+Item {
+  implicitWidth: text.width + 20
+  implicitHeight: text.height
+
+  property string title: Hyprland.activeToplevel ? Hyprland.activeToplevel.title : ""
+
+  Text {
     id: text
-    text: Hyprland.activeToplevel ? Hyprland.activeToplevel.title : ""
-    font {
-      pixelSize: Colors.fontSize;
+    anchors.centerIn: parent
+
+    text: title
+    font { 
+      pixelSize: Colors.fontSize; 
       family: Colors.fontFamily
-      weight: Font.Medium
+      bold: true 
     }
     color: Colors.fg
+  }
 }

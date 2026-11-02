@@ -34,9 +34,9 @@ Scope {
             id: workspaceWidget
           }
 
-          ActiveWindowWidget {
-            id: activeWindowWidget
-          }
+          //ActiveWindowWidget {
+          //  id: activeWindowWidget
+          //}
         }
 
         RowLayout {
