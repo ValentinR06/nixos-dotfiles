@@ -8,6 +8,7 @@
   home.packages = with pkgs; [
     grc
     fzf
+    tree
     fastfetch
     noriskclient-launcher
     modrinth-app
@@ -15,6 +16,15 @@
     spotify
     prismlauncher
     rpi-imager
+    hyprpaper
+    vscode-fhs
+    neovim
+    fastfetch
+    superfile
+    nautilus
+    bluetui
+    quickshell
+    kitty
   ];
   
   programs.fish = {

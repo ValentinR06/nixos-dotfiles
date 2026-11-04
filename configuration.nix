@@ -35,15 +35,12 @@
     isNormalUser = true;
     shell = pkgs.fish;
     extraGroups = [ "wheel" ];
-    packages = with pkgs; [
-      tree
-    ];
   };
 
   nixpkgs.config.allowUnfree = true;
 
-  programs.firefox.enable = true;
   programs.fish.enable = true;
+  programs.firefox.enable = true;
   programs.helium.enable = true;
 
   programs.steam = {
@@ -54,17 +51,9 @@
 
   environment.systemPackages = with pkgs; [
     vim
-    wget
-    quickshell
-    kitty
-    git
-    hyprpaper
-    vscode-fhs
     neovim
-    fastfetch
-    superfile
-    nautilus
-    bluetui
+    wget
+    git
     brightnessctl
   ];
 
