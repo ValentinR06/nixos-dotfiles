@@ -25,6 +25,7 @@
     bluetui
     quickshell
     kitty
+    discord
   ];
   
   programs.fish = {
