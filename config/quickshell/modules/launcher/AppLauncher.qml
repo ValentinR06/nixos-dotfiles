@@ -1,12 +1,11 @@
 import Quickshell
-import QuickShell.Wayland
-import QuickShell.Io
+import Quickshell.Wayland
+import Quickshell.Io
 import QtQuick
 import qs
 
 PanelWindow {
     id : root
-    property var screen
 
     IpcHandler {
         target: "applauncher"
@@ -27,7 +26,7 @@ PanelWindow {
     mask: Region {
         item: AppLauncherState.launcherVisible ? maskCover : null
     }
-    
+
     Item {
         id: maskCover
         anchors.fill: parent
@@ -37,33 +36,32 @@ PanelWindow {
 
     property string searchQuery: ""
     property int selectedIndex: 0
-    readonly property bool isSelected: searchQuery.trim() !== ""
+    readonly property bool isSearching: searchQuery.trim() !== ""
 
     property var filteredApps: {
-        var q = searchQuery.trim().toLowerCase()
-        var vals = DesktopEntries.applications.values
+        const q = searchQuery.trim().toLowerCase()
+        const vals = [...DesktopEntries.applications.values].filter(e => !e.noDisplay)
 
         if (q === "") {
-            return vals.filter(function (e) {
-                if (e.name.toLowerCase().indexOf(q) !== -1) return true
-                if (e.genericName && e.genericName.toLowerCase().indexOf(q) !== -1) return true
-                for (var i = 0; i < e.keywords.length; i++) {
-                    if (e.keywords[i].toLowerCase().indexOf(q) !== -1) return true
-                }
-                return false
-            }).sort(function (a, b) {
+            const recent = AppLauncherState.recentIds
+            return vals.sort((a, b) => {
+                const ai = recent.indexOf(a.id)
+                const bi = recent.indexOf(b.id)
+                if (ai !== -1 && bi !== -1) return ai - bi
+                if (ai !== -1) return -1
+                if (bi !== -1) return 1
                 return a.name.localeCompare(b.name)
             })
         }
 
-        var recent = AppLauncherState.recentIds
-        return vals.slice().sort(function (a, b) {
-            var ai = recent.indexOf(a.id)
-            var bi = recent.indexOf(b.id)
-
-            if (ai !== -1 && bi !== -1) return ai - bi
-            if (ai !== -1) return -1
-            if (bi !== -1) return 1
+        return vals.filter(e => {
+            if ((e.name ?? "").toLowerCase().includes(q)) return true
+            if ((e.genericName ?? "").toLowerCase().includes(q)) return true
+            return (e.keywords ?? []).some(k => k.toLowerCase().includes(q))
+        }).sort((a, b) => {
+            const as = a.name.toLowerCase().startsWith(q)
+            const bs = b.name.toLowerCase().startsWith(q)
+            if (as !== bs) return as ? -1 : 1
             return a.name.localeCompare(b.name)
         })
     }
@@ -95,9 +93,22 @@ PanelWindow {
     }
 
     readonly property int maxVisible: 7
-    readonly property int itemHeight: 42
+    readonly property int itemHeight: 52
     readonly property int panelWidth: 440
-    readonly property int panelHeight: 88 + Math.min(maxVisible, filteredApps.length) * itemHeight
+    readonly property int panelHeight: contentColumn.implicitHeight + 24
+
+    property real lastMouseX: -1
+    property real lastMouseY: -1
+
+    property real wheelAccum: 0
+
+    function mouseReallyMoved(area, mouse) {
+        const p = area.mapToItem(null, mouse.x, mouse.y)
+        if (p.x === lastMouseX && p.y === lastMouseY) return false
+        lastMouseX = p.x
+        lastMouseY = p.y
+        return true
+    }
 
     MouseArea {
         anchors.fill: parent
@@ -139,6 +150,7 @@ PanelWindow {
         }
 
         Column {
+            id: contentColumn
             anchors {
                 top: parent.top
                 topMargin: 12
@@ -183,24 +195,11 @@ PanelWindow {
                 }
 
                 Item {
-                    width: parent.width - 40
-                    height: parent.height
-
-                    Text {
-                        anchors.fill: parent
-                        text: root.isSearching ? "" : "Search apps..."
-                        color: Colors.fg
-                        opacity: 0.28
-                        font{
-                            pixelSize: Colors.fontSize
-                            family: Colors.fontFamily
-                        }
-                        verticalAlignment: Text.AlignVCenter
-                        visible: searchInput.text === ""
+                    anchors {
+                        fill: parent
+                        leftMargin: 16
+                        rightMargin: 16
                     }
-                
-                    width: parent.width - 40
-                    height: parent.height
 
                     Text {
                         anchors.fill: parent
@@ -228,23 +227,23 @@ PanelWindow {
                         clip: true
 
                         onTextChanged: root.searchQuery = text
-                    }
 
-                    Keys.onPressed: function (event) {
-                        if (event.key === Qt.Key_Up) {
-                            root.navigate(-1)
-                            event.accepted = true
-                        } else if (event.key === Qt.Key_Down) {
-                            root.navigate(1)
-                            event.accepted = true
-                        } else if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
-                            if (root.filteredApps.length > 0) {
-                                root.launchEntry(root.filteredApps[root.selectedIndex])
+                        Keys.onPressed: function (event) {
+                            if (event.key === Qt.Key_Up) {
+                                root.navigate(-1)
+                                event.accepted = true
+                            } else if (event.key === Qt.Key_Down) {
+                                root.navigate(1)
+                                event.accepted = true
+                            } else if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
+                                if (root.filteredApps.length > 0) {
+                                    root.launchEntry(root.filteredApps[root.selectedIndex])
+                                    event.accepted = true
+                                }
+                            } else if (event.key === Qt.Key_Escape) {
+                                AppLauncherState.hide()
                                 event.accepted = true
                             }
-                        } else if (event.key === Qt.Key_Escape) {
-                            AppLauncherState.hide()
-                            event.accepted = true
                         }
                     }
                 }
@@ -258,18 +257,10 @@ PanelWindow {
             ListView {
                 id: listView
                 width: parent.width
-                height: Math.min(root.filteredApps.length,root.maxVisible) * root.itemHeight
+                height: Math.max(1, Math.min(root.filteredApps.length, root.maxVisible)) * root.itemHeight
                 model: root.filteredApps
                 clip: true
                 interactive: false
-
-                MouseArea {
-                    anchors.fill: parent
-                    onWheel: function (wheel) {
-                        if (wheel.angleDelta.y < 0) root.navigate(1)
-                        else root.navigate(-1)
-                    }
-                }
 
                 Text {
                     anchors.centerIn: parent
@@ -297,7 +288,7 @@ PanelWindow {
                             bottomMargin: 2
                         }
                         radius: 10
-                        color: appRow.sel ? Colors.accent : "transparent"
+                        color: appRow.sel ? Colors.surface_bright : "transparent"
                         Behavior on color {
                             ColorAnimation {
                                 duration: 100
@@ -327,8 +318,7 @@ PanelWindow {
                                 Image {
                                     id: appIcon
                                     anchors.fill: parent
-                                    width: 22
-                                    height: 22
+                                    anchors.margins: 4
                                     source: modelData.icon !== "" ? "image://icon/" + modelData.icon : ""
                                     smooth: true
                                     mipmap: true
@@ -343,7 +333,7 @@ PanelWindow {
                                         family: Colors.fontFamily
                                         weight: Font.Bold
                                     }
-                                    color: appRow.sel ? Colors.accentAlt : Colors.fg
+                                    color: appRow.sel ? Colors.accent_alt : Colors.fg
                                     Behavior on color {
                                         ColorAnimation {
                                             duration: 100
@@ -373,7 +363,7 @@ PanelWindow {
 
                                 Row {
                                     spacing: 6
-                                    visible: appRow.isRecent || modulData.genericName !== ""
+                                    visible: appRow.isRecent || modelData.genericName !== ""
 
                                     Rectangle {
                                         visible: appRow.isRecent
@@ -411,14 +401,14 @@ PanelWindow {
                             }
                         }
                         MouseArea {
+                            id: rowMouse
                             anchors.fill: parent
                             hoverEnabled: true
-                            onEntered: root.selectedIndex = index
-                            onClicked: root.launchEntry(modelData)
-                            onWheel: function (wheel) {
-                                if (wheel.angleDelta.y < 0) root.navigate(1)
-                                else root.navigate(-1)
+                            onPositionChanged: mouse => {
+                                if (root.mouseReallyMoved(rowMouse, mouse))
+                                    root.selectedIndex = index
                             }
+                            onClicked: root.launchEntry(modelData)
                         }
                     }
                 }
@@ -426,6 +416,19 @@ PanelWindow {
             Item {
                 width: 1
                 height: 4
+            }
+        }
+        MouseArea {
+            anchors.fill: parent
+            acceptedButtons: Qt.NoButton
+            onWheel: wheel => {
+                const d = wheel.angleDelta.y !== 0 ? wheel.angleDelta.y : wheel.pixelDelta.y * 6
+                root.wheelAccum += d
+                const step = 80
+                while (Math.abs(root.wheelAccum) >= step) {
+                    root.navigate(root.wheelAccum < 0 ? 1 : -1)
+                    root.wheelAccum -= Math.sign(root.wheelAccum) * step
+                }
             }
         }
     }

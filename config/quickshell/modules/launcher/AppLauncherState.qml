@@ -1,20 +1,27 @@
-import Singleton
+pragma Singleton
 import QtQuick
-import QtCore
-import QuickShell
+import Quickshell
+import Quickshell.Io
 
-QtObject {
+Singleton {
     id: root
+
     property bool launcherVisible: false
-    property var recentIds: []
+    readonly property var recentIds: adapter.recentIds
 
-    property var_settings: Settings {
-        category : "AppLauncher"
-        property string recentIdsSerialized: "[]"
-    }
+    FileView {
+        path: Quickshell.statePath("app-launcher.json")
+        watchChanges: false
+        onLoadFailed: error => {
+            if (error === FileViewError.FileNotFound) writeAdapter()
+        }
 
-    Component.onCompleted: {
-        recentIds = JSON.parse(var_settings.recentIdsSerialized)
+        JsonAdapter {
+            id: adapter
+            property list<string> recentIds: []
+        }
+
+        onAdapterUpdated: writeAdapter()
     }
 
     function toggle() { launcherVisible = !launcherVisible }
@@ -22,20 +29,14 @@ QtObject {
     function hide() { launcherVisible = false }
 
     function recordLaunch(id) {
-        var list = recentIds.slice()
+        var list = Array.from(adapter.recentIds)
         var idx = list.indexOf(id)
         if (idx !== -1) list.splice(idx, 1)
-    
         list.unshift(id)
-
-        if (list.length > 12) list = list.slice(0, 12)
-    
-        recentIds = list
-        _settings.recentIdsSerialized = JSON.stringify(list)
+        adapter.recentIds = list.slice(0, 12)
     }
 
     function clearRecent() {
-        recentIds = []
-        _settings.recentIdsSerialized = "[]"
+        adapter.recentIds = []
     }
 }
