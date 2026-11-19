@@ -5,7 +5,7 @@ import "./modules/launcher"
 
 Scope {
   Bar { id: bar}
-  Launcher { id: launcher}
+  AppLauncher { id: appLauncher}
 }
 
 

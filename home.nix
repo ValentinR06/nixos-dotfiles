@@ -26,6 +26,7 @@
     quickshell
     kitty
     discord
+    aseprite
   ];
   
   programs.fish = {
